@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HBD!!</title>
+  <!-- Google Fonts untuk font tulisan tangan diary & estetika teks -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Screen 1: Welcome -->
+  <div class="stage active" id="stage1">
+    <div class="letter-icon">🐱🎀</div>
+    <h3 class="letter-title">Happy Birthday</h3>
+    <p class="letter-desc">I have something special for youuu... lets start it (˶>⩊<˶) </p>
+    <button class="btn" onclick="nextScreen('screen-game')">Start Game &rarr;</button>
+  </div>
+
+  <!-- Screen 2: Memory Game -->
+  <div class="container" id="screen-game">
+    <h2>Let's play a little game<br>before your surprise</h2>
+    <p class="subtitle compact">Tap two cards to find the matching pairs!</p>
+    <div class="stats">Moves: <span id="moves-count">0</span></div>
+
+    <div class="grid" id="card-grid"></div>
+
+    <div id="game-completed" class="game-alert">
+      <p>Yay! You found all the pairs</p>
+      <button class="btn" onclick="nextStage(2)">Continue &rarr;</button>
+    </div>
+  </div>
+
+  <!-- Screen 3: TIME FOR CAKE! -->
+  <div class="stage" id="stage2">
+    <h2 class="stage-title" id="cakeTitle">Time for Cake!</h2>
+    <p class="stage-subtitle" id="cakeSubtitle">Lets cut the cake (˶ˆᗜˆ˵) 🎂</p>
+
+    <div class="cake-svg-wrapper">
+      <svg width="220" height="220" viewBox="0 0 200 200">
+        <!-- Batang Lilin & Api -->
+        <line x1="100" y1="50" x2="100" y2="70" stroke="#ffd166" stroke-width="6" stroke-linecap="round"/>
+        <path id="candleFlame" class="flame" d="M100 18 C91 29 91 38 97 44 C93 42 89 38 88 33 C82 42 85 54 100 58 C115 54 118 42 112 33 C111 38 107 42 103 44 C109 35 107 26 100 18 Z" fill="#ff8c42"/>
+        <path class="flame-core" d="M100 31 C96 37 96 42 100 48 C104 42 104 37 100 31 Z" fill="#fff4a3"/>
+        
+        <!-- Lapisan Kue Atas -->
+        <rect x="60" y="70" width="80" height="35" rx="6" fill="#c8895d"/>
+        <path d="M60 78 Q70 84 80 78 Q90 84 100 78 Q110 84 120 78 Q130 84 140 78" fill="none" stroke="#f6d3a6" stroke-width="5"/>
+        <line x1="70" y1="82" x2="76" y2="79" stroke="#f7e3a3" stroke-width="3" stroke-linecap="round"/>
+        <line x1="86" y1="91" x2="92" y2="88" stroke="#9ed8e5" stroke-width="3" stroke-linecap="round"/>
+        <line x1="104" y1="82" x2="110" y2="85" stroke="#f29bb2" stroke-width="3" stroke-linecap="round"/>
+        <line x1="121" y1="94" x2="127" y2="91" stroke="#f7e3a3" stroke-width="3" stroke-linecap="round"/>
+        <line x1="133" y1="82" x2="137" y2="86" stroke="#9ed8e5" stroke-width="3" stroke-linecap="round"/>
+
+        <!-- Lapisan Kue Tengah -->
+        <rect x="45" y="105" width="110" height="40" rx="8" fill="#a96642"/>
+        <path d="M45,111 Q60,126 75,111 Q90,126 105,111 Q120,126 135,111 Q145,126 155,111" fill="none" stroke="#f6d3a6" stroke-width="4"/>
+        <circle cx="58" cy="126" r="2.5" fill="#f29bb2"/>
+        <circle cx="76" cy="135" r="2.5" fill="#f7e3a3"/>
+        <circle cx="96" cy="124" r="2.5" fill="#9ed8e5"/>
+        <circle cx="119" cy="135" r="2.5" fill="#f29bb2"/>
+        <circle cx="140" cy="124" r="2.5" fill="#f7e3a3"/>
+
+        <!-- Lapisan Kue Bawah -->
+        <rect x="30" y="145" width="140" height="45" rx="10" fill="#78452f"/>
+        <line x1="45" y1="158" x2="52" y2="155" stroke="#f7e3a3" stroke-width="3" stroke-linecap="round"/>
+        <line x1="66" y1="174" x2="73" y2="171" stroke="#9ed8e5" stroke-width="3" stroke-linecap="round"/>
+        <line x1="83" y1="157" x2="89" y2="161" stroke="#f29bb2" stroke-width="3" stroke-linecap="round"/>
+        <line x1="113" y1="174" x2="120" y2="170" stroke="#f7e3a3" stroke-width="3" stroke-linecap="round"/>
+        <line x1="130" y1="157" x2="136" y2="161" stroke="#9ed8e5" stroke-width="3" stroke-linecap="round"/>
+        <line x1="148" y1="175" x2="155" y2="171" stroke="#f29bb2" stroke-width="3" stroke-linecap="round"/>
+
+        <!-- Garis Potong -->
+        <line id="cutLine" x1="100" y1="65" x2="100" y2="190" stroke="#fff" stroke-width="3" stroke-dasharray="5 5" opacity="0"/>
+      </svg>
+    </div>
+
+    <!-- Slider dengan thumb berbentuk garis pisau "|" -->
+    <input type="range" min="0" max="100" value="0" class="knife-slider" id="knifeRange" oninput="cutCake(this.value)">
+    <p id="knifeGuide" class="knife-guide-text">Drag the knife to cut the cake!!!</p>
+
+    <button id="cakeNextBtn" class="btn-pink" style="display:none;" onclick="nextStage(3)">Make a Wish ➔</button>
+  </div>
+
+  <!-- Screen 4: Floating Wishes -->
+  <div class="stage" id="stage3">
+    <h2 class="stage-title">Floating Wishes</h2>
+    <p class="stage-subtitle">Pop the bubbles to make your wishes come true! (๑ᵔ⤙ᵔ๑)</p>
+
+    <div class="bubble-area">
+      <div class="bubble b1" onclick="popWish(this, 'May u always be healthy, live a long life, and be kept away from anything bad! ✨')">Stay Healthy</div>
+      <div class="bubble b2" onclick="popWish(this, 'May your days always be filled with laughter and the most beautiful smiles! 😊')">Stay Happy</div>
+      <div class="bubble b3" onclick="popWish(this, 'May all your big dreams and aspirations come true one by one! 🌟')">Dream Big</div>
+      <div class="bubble b4" onclick="popWish(this, 'May you succeed and have everything go smoothly in your career and studies! 💼')">Be Successful</div>
+      <div class="bubble b5" onclick="popWish(this, 'May you always feel loved, appreciated, and surrounded by genuine warmth! 💖')">Always Loved</div>
+      <div class="bubble b6" onclick="popWish(this, 'I hope you become smarter, wiser, and a better person as you grow! 📚')">Become smarter</div>
+    </div>
+
+    <!-- Kotak pesan dengan background kertas memo -->
+    <div class="wish-result" id="wishText">✨ Press any bubble ✨</div>
+
+    <button class="btn-pink" onclick="nextStage(4)">Open Secret Diary ➔</button>
+  </div>
+
+  <!-- Screen 4: Transition to Secret Diary -->
+  <div class="stage" id="stage4">
+    <h2 class="stage-title">One More Thing...</h2>
+    <button class="btn-pink" onclick="nextStage(5)">Open Secret Book ➔</button>
+  </div>
+
+  <!-- Screen 5: Secret Diary -->
+  <div class="stage" id="stage5">
+    <h2 class="stage-title">Secret Message ────୨ৎ────</h2>
+    <p class="stage-subtitle" id="diarySubtitle">Tap the book to open and read it 📖</p>
+
+    <!-- Bentuk Diary Buku Klasik -->
+    <div class="diary-book" id="diaryBook" onclick="unlockDiary()">
+      <div class="book-spine"></div>
+      <div class="book-cover">
+        <div class="bookmark-ribbon"></div>
+        <div class="book-decor-border">
+          <div class="book-emblem">✨📖✨</div>
+          <h3 class="book-title">My Secret<br>Book</h3>
+          <div class="diary-padlock" id="lockStatus">🔒 TAP TO OPEN</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Halaman Kertas Catatan Bergaris Diary -->
+    <div class="letter-sheet" id="letterSheet">
+      <div class="letter-inner">
+        <h3 class="letter-sheet-title">Happy Birthday! (˶ˆᗜˆ˵)</h3>
+        <p>I hope life treats you gently and gives you more reasons to smile, may you keep growing, learning, and become someone you're proud of...</p>
+        <p style="margin-top: 10px;">I also hope the days ahead bring you closer to the things you dream of, and.. whatever comes your way, you'll find the strength to face it and the courage to keep moving forward.</p>
+        <p class="signature">Wishing you a beautiful year ahead ⋆🐾°</p>
+        <div style="text-align: center;">
+          <button class="btn-pink" onclick="location.reload()" style="margin-top: 15px;">Repeat From Start ↺</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
